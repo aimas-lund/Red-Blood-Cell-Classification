@@ -5,12 +5,6 @@ import glob
 import os
 
 
-def pickle_image(path, image, protocol=0):
-    file = open(path, 'wb')
-    pkl.dump(image, file)
-    file.close()
-
-
 def pickle_images(images, path='./data.pkl', protocol=3):
     with open(path, 'wb') as file:
         pkl.dump(images, file, protocol=protocol)
@@ -27,6 +21,7 @@ def images_to_array_list(path, file_extension='png', flatten=False):
     """
     output = []
 
+    # finds every filename in the specified directory and iterates over any file with the specified extension
     for filename in glob.glob(os.path.join(path, '*.' + file_extension)):
         x = np.asarray(Image.open(filename))
 
