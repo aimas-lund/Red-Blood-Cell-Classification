@@ -20,7 +20,8 @@ class CNN:
         self.layer_overview = []
         self.layer_dict = self.init_layer_dict()
 
-    def init_layer_dict(self):
+    @staticmethod
+    def init_layer_dict():
         keys = list(range(3))
         layer_type = ["Convolutional Layer", "Fully Connected Layer", "Max Pooling Layer"]
 
@@ -49,7 +50,8 @@ class CNN:
                 image_aug.add_random_flip_leftright()  # adds left- and right flipped images to the training data
 
             if random_rotation:
-                image_aug.add_random_rotation(max_angle=max_angle)  # rotates random training data by a specified angle (
+                image_aug.add_random_rotation(
+                    max_angle=max_angle)  # rotates random training data by a specified angle (
             # degrees)
 
             if random_blur:
@@ -141,7 +143,6 @@ class CNN:
         # TODO: Fill this method out
         x = 1
 
-
     def save_model(self, filename='cnn_model'):
         if self.model is None:
             print("There is no model to save!")
@@ -150,7 +151,6 @@ class CNN:
             print("Model successfully saves as: " + filename + ".tfl")
 
     def _display_model(self):
-
         layers = self.layer_overview[:1]
         if self.layer_overview[0][0] is None:
             batch_number = 'Not specified'
@@ -162,4 +162,20 @@ class CNN:
         print("")
 
         for layer in layers:
-            print("")   # TODO: Fix the printing function
+            print("------------------------------------------")
+            if layer[0] == 'cl':
+                print("Layer {}: Convolutional Layer".format(layer.index + 1))
+                print("Number of convolutional filters: {}".format(layer[1]))
+                print("Size of filter(s): {}".format(layer[2]))
+                print("Type of activation function: " + layer[3])
+                print("Padding algorithm: " + layer[4])
+            elif layer[0] == 'fcl':
+                print("Layer {}: Fully Connected Layer".format(layer.index + 1))
+                print("Number of units in layer: {}".format(layer[1]))
+                print("Type of activation function: " + layer[3])
+            elif layer[0] == 'mpl':
+                print("Layer {}: Max Pooling Layer".format(layer.index + 1))
+                print("Pooling kernel size: {}".format(layer[1]))
+                print("Padding algorithm: " + layer[2])
+            else:
+                print("Layer {} - Layer type not detected".format(layer.index + 1))
