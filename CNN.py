@@ -73,13 +73,13 @@ class CNN:
     def init_network(self, shape=None, name='InputData'):
         """
         Initializes the network attribute for the CNN class
-        :param shape: (list(int)) A list of integers specifying batch size, height-, width and depth of the input array,
-         respectively.
+        :param shape: (list(int)) A list of integers specifying batch size, height-, width and channel number
+         of the input array, respectively.
         :param name: (str) Given name to the network. Will be called 'InputData' by default.
         :return: An initialized network attribute for the CNN class.
         """
         if shape is None:
-            shape = [None, 150, 800, 3]
+            shape = [None, 150, 800, 3] # non-specified batch-size, 150x800 resolution and 3 color channels
 
         self.network = input_data(shape=shape,
                                   data_preprocessing=self.data_pre_processing,
@@ -92,7 +92,7 @@ class CNN:
                        padding='same'):
         """
         Adds a convolutional layer to the specified network.
-        :param nb_filter: (int) Specifying the number of convolutional filters
+        :param nb_filter: (int) Specifying the number of convolution filters
         :param filter_size: (int or list(int)) Specifying the size of the filters
         :param activation: (str) Specifying which type of activation function should be applied to the weights in the
          given layer. Default is set to 'rely' (Rectified Linear Unit).
@@ -140,6 +140,10 @@ class CNN:
             )  # appends a list of specifying values of the max pooling layer to the overview list
 
     def fit_model(self):
+        """
+        Prints the specifications
+        :return:
+        """
         # TODO: Fill this method out
         x = 1
 
@@ -159,7 +163,7 @@ class CNN:
 
         print("\n------------------------------------------")
         print("Deep Neural Network Overview")
-        print("")
+        print("Batch Size {}".format(batch_number))
 
         for layer in layers:
             print("------------------------------------------")
