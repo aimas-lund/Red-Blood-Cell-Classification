@@ -117,11 +117,16 @@ class DataHandler:
                 labels.append(sample[1])
 
             if reshape:
-                features = np.array(features).reshape(-1, self.IMG_RES[0], self.IMG_RES[1], depth) # im not sure why this step is necessary
+                features = np.array(features).reshape(-1, self.IMG_RES[0], self.IMG_RES[1], depth) # im not sure why
+                # this step is necessary
 
             return np.array(features), np.array(labels)
 
     def save_training_data(self, filename='training_data'):
+        """
+        Saves the training data as a pickle file
+        :param filename: (str) A specified filename to the ./pickle_data directory
+        """
         if len(self.training_data) < 1:
             raise ValueError
         else:
@@ -130,6 +135,10 @@ class DataHandler:
             pkl_save.close()
 
     def load_training_data(self, filename='training_data'):
+        """
+        Loading a pickle file into the self.training_data attribute from the ./pickle_data directory
+        :param filename: (str) A specified filename
+        """
         try:
             pkl_load = open("./pickle_data/" + filename + ".pickle", 'rb')
             self.training_data = pickle.load(pkl_load)
