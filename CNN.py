@@ -79,7 +79,7 @@ class CNN:
         :return: An initialized network attribute for the CNN class.
         """
         if shape is None:
-            shape = [None, 150, 800, 3] # non-specified batch-size, 150x800 resolution and 3 color channels
+            shape = [None, 150, 800, 3]  # non-specified batch-size, 150x800 resolution and 3 color channels
 
         self.network = input_data(shape=shape,
                                   data_preprocessing=self.data_pre_processing,
@@ -139,13 +139,34 @@ class CNN:
                 [2, kernel_size, padding]
             )  # appends a list of specifying values of the max pooling layer to the overview list
 
-    def fit_model(self):
+    def fit_model(self, data, target, checkpoint_path, vali_data=None, vali_target=None, n_epoch=50,
+                  model_name='rbc-classifier'):
         """
-        Prints the specifications
-        :return:
+        Trains the CNN model with the specified data and parameters
+        :param data:
+        :param target:
+        :param checkpoint_path:
+        :param vali_data:
+        :param vali_target:
+        :param n_epoch:
+        :param model_name:
+        :return: Returns a trained CNN and the trained CNN to a '.tfl'-file.
         """
-        # TODO: Fill this method out
-        x = 1
+        if self.network is None:
+            print("No network has been initialized!")
+        else:
+            self.network = regression(self.network, optimizer='adam',
+                                      loss='categorical_crossentropy',
+                                      learning_rate=0.001)
+
+            self.model = tflearn.DNN(self.network, tensorboard_verbose=0,
+                                     checkpoint_path=checkpoint_path)
+
+            self.model.fit(data, target, n_epoch=n_epoch, shuffle=True, validation_set=(vali_data, vali_target),
+                           show_metric=True, batch_size=96,
+                           snapshot_epoch=True, run_id='rbc-classifier')
+
+            self.model.save(model_name + '.tfl')
 
     def save_model(self, filename='cnn_model'):
         if self.model is None:
@@ -166,7 +187,7 @@ class CNN:
         print("Batch Size {}".format(batch_number))
 
         for layer in layers:
-            print("------------------------------------------")
+            print("------------------------------")
             if layer[0] == 'cl':
                 print("Layer {}: Convolutional Layer".format(layer.index + 1))
                 print("Number of convolutional filters: {}".format(layer[1]))
