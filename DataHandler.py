@@ -6,10 +6,10 @@ import os
 import cv2
 import random
 import pickle
+import sys
 
 
 class DataHandler:
-
     def __init__(self, data_dir=None, categories=None, test=None):
         if test is None:
             self._TEST_CATEGORY = ['test']
@@ -47,12 +47,17 @@ class DataHandler:
 
         for category in self.CATEGORIES:
             path = os.path.join(self.DATA_DIR, category)  # define path to the different category data samples
+            num_files = len(os.listdir(path))
+            num_file = 0
             for img in os.listdir(path):
                 try:
                     if grayscale:
                         images.append(cv2.imread(os.path.join(path, img), cv2.IMREAD_GRAYSCALE))
                     else:
                         images.append(cv2.imread(os.path.join(path, img)))
+                    num_file += 1
+                    sys.stdout.write("\r{} of {} files loaded".format(num_file, num_files))
+                    sys.stdout.flush()
                 except Exception:
                     print("Image {} in category {} skipped due to error!".format(img.index, category))
                     pass
