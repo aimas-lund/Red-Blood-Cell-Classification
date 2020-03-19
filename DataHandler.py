@@ -122,7 +122,7 @@ class DataHandler:
                 labels.append(sample[1])
 
             if reshape:
-                features = np.array(features).reshape(-1, self.IMG_RES[0], self.IMG_RES[1], depth) # im not sure why
+                features = np.array(features).reshape(-1, self.IMG_RES[0], self.IMG_RES[1], depth)  # im not sure why
                 # this step is necessary
 
             return np.array(features), np.array(labels)
@@ -151,3 +151,28 @@ class DataHandler:
 
         except FileNotFoundError:
             print("The specified filename does not exist in the pickle_data folder.")
+
+    def png2jpg(self, input_dir, output_dir, filename='raw_'):
+
+        try:
+            os.mkdir(output_dir)
+        except FileExistsError:
+            pass
+
+        img_list = os.listdir(input_dir)
+        num_files = len(img_list)
+        num_file = 0
+        num_error = 0
+
+        for i in range(num_files):
+            try:
+                png = cv2.imread(os.path.join(input_dir, img_list[i]))
+                num_file += 1
+                if not cv2.imwrite(output_dir + filename + str(i) + '.jpg', png):
+                    num_error += 1
+                sys.stdout.write("\r{} of {} files converted from png to jpg - {} errors.".format(num_file,
+                                                                                                  num_files,
+                                                                                                  num_error))
+                sys.stdout.flush()
+            except Exception:
+                print("Image {} skipped due to error!".format(img.index))
