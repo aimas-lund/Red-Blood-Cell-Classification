@@ -71,31 +71,6 @@ class DataHandler:
 
             return np.array(images)
 
-    def _fetch_images_from_dir(self, dir, grayscale=False):
-        """
-        Fetches data from the data directories.
-        :param grayscale: boolean type to specify if images should be grayscale (normal is BRG blue-red-green).
-        :param show: show the first sample of every category.
-        :return: a numpy array containing all imported images.
-        """
-        images = []
-        num_files = len(os.listdir(dir))
-        num_file = 0
-        for img in os.listdir(dir):
-            try:
-                if grayscale:
-                    images.append(cv2.imread(os.path.join(dir, img), cv2.IMREAD_GRAYSCALE))
-                else:
-                    images.append(cv2.imread(os.path.join(dir, img)))
-                num_file += 1
-                sys.stdout.write("\r{} of {} files loaded".format(num_file, num_files))
-                sys.stdout.flush()
-            except Exception:
-                print("Image {} skipped due to error!".format(img.index))
-                pass
-
-        return np.array(images)
-
     def create_training_data(self, grayscale=False, shuffle=True):
         """
         Creates training data for the attribute: self.training_data
@@ -147,7 +122,7 @@ class DataHandler:
                 labels.append(sample[1])
 
             if reshape:
-                features = np.array(features).reshape(-1, self.IMG_RES[0], self.IMG_RES[1], depth) # im not sure why
+                features = np.array(features).reshape(-1, self.IMG_RES[0], self.IMG_RES[1], depth)  # im not sure why
                 # this step is necessary
 
             return np.array(features), np.array(labels)
@@ -178,9 +153,26 @@ class DataHandler:
             print("The specified filename does not exist in the pickle_data folder.")
 
     def png2jpg(self, input_dir, output_dir, filename='raw_'):
-        pngs = self._fetch_images_from_dir(input_dir)
-        image_num = len(pngs)
 
-        for png in pngs:
-            cv2.imwrite(filename + png.index + '.jpg', png)
-            print("Converted {} of {} files".format(png.index, image_num))
+        try:
+            os.mkdir(output_dir)
+        except FileExistsError:
+            pass
+
+        img_list = os.listdir(input_dir)
+        num_files = len(img_list)
+        num_file = 0
+        num_error = 0
+
+        for i in range(num_files):
+            try:
+                png = cv2.imread(os.path.join(input_dir, img_list[i]))
+                num_file += 1
+                if not cv2.imwrite(output_dir + filename + str(i) + '.jpg', png):
+                    num_error += 1
+                sys.stdout.write("\r{} of {} files converted from png to jpg - {} errors.".format(num_file,
+                                                                                                  num_files,
+                                                                                                  num_error))
+                sys.stdout.flush()
+            except Exception:
+                print("Image {} skipped due to error!".format(img.index))
