@@ -9,6 +9,9 @@ import pickle
 import sys
 
 
+def extract(filename):
+    return int(filename.split('_')[1].split('.')[0])
+
 class DataHandler:
     def __init__(self, data_dir=None, categories=None, test=None):
         if test is None:
@@ -164,11 +167,11 @@ class DataHandler:
         num_file = 0
         num_error = 0
 
-        for i in range(num_files):
+        for img in sorted(img_list, key=extract):
             try:
-                png = cv2.imread(os.path.join(input_dir, img_list[i]))
+                png = cv2.imread(os.path.join(input_dir, img))
                 num_file += 1
-                if not cv2.imwrite(output_dir + filename + str(i) + '.jpg', png):
+                if not cv2.imwrite(output_dir + filename + str(num_file - 1) + '.jpg', png):
                     num_error += 1
                 sys.stdout.write("\r{} of {} files converted from png to jpg - {} errors.".format(num_file,
                                                                                                   num_files,
