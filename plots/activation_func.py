@@ -38,8 +38,8 @@ for idx, y in enumerate(Y):
     ax[idx].set_title(titles[idx])
     ax[idx].grid(b=True, ls='-.')
     ax[idx].set_xticks(X_ticks)
-    ax[idx].set_xlabel("x")
-    ax[idx].set_ylabel("y")
+    ax[idx].set_xlabel("input")
+    ax[idx].set_ylabel("output")
 
 plt.show()
 
@@ -51,8 +51,8 @@ for idx, y in enumerate(Y):
 
 plt.grid(ls='-.')
 plt.xticks(X_ticks)
-plt.xlabel("x")
-plt.ylabel("y")
+plt.xlabel("input")
+plt.ylabel("output")
 plt.legend(loc='right')
 plt.show()
 
