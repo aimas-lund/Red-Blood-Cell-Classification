@@ -11,6 +11,9 @@ def sigmoid(x):
 def relu(x):
     return max([0, x])
 
+def grad_sigmoid(x):
+    return math.exp(-x) / (1 + math.exp(-x))**2
+
 
 # init tables
 X = np.arange(start=-5, stop=5, step=0.05)
