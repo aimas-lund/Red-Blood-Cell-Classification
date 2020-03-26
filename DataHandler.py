@@ -39,6 +39,19 @@ class DataHandler:
 
         return np.shape(image)
 
+    def fetch_image(self, filename, category, grayscale=False, show=False):
+        path = os.path.join(self.DATA_DIR, category)
+
+        if grayscale:
+            img = cv2.imread(os.path.join(path, filename), cv2.IMREAD_GRAYSCALE)
+        else:
+            img = cv2.imread(os.path.join(path, filename), cv2.IMREAD_GRAYSCALE)
+
+        if show:
+            cv2.imshow(img)
+
+        return img
+
     def fetch_images(self, grayscale=False, show=False):
         """
         Fetches data from the data directories.
